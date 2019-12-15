@@ -22,10 +22,6 @@
   <body>
     <div class="page-header">
       <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
-      <h1><?php echo $cleardb_url ?></h1>
-      <h1><?php echo $cleardb_server ?></h1>
-      <h1><?php echo $cleardb_username ?></h1>
-      <h1><?php echo $cleardb_password ?></h1>
     </div>
     <p>
       <a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>
