@@ -2,11 +2,11 @@
   session_start();
   
   if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+    header("location: index.php");
     exit;
   }
   
-  require_once "config.php";
+  require_once "db/config.php";
   
   $new_password = $confirm_password = "";
   $new_password_err = $confirm_password_err = "";
@@ -41,7 +41,7 @@
           
           if(mysqli_stmt_execute($stmt)){
             session_destroy();
-            header("location: login.php");
+            header("location: index.php");
             exit();
           } else{
             echo "Oops! Something went wrong. Please try again later.";
