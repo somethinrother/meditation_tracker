@@ -1,18 +1,18 @@
 <?php
-  if($_ENV['PHP_DEVELOPMENT'] === true){
+  if(getenv('ENVIRONMENT') === 'development'){
     /* Database credentials. Assuming you are running MySQL
     server with default setting (user 'root' with no password) */
-    $cleardb_server = '127.0.0.1';
-    $cleardb_username = 'somethinrother';
-    $cleardb_password = 'password';
-    $cleardb_db = 'meditation_tracker';
+    $db_hostname = getenv('DB_HOST');
+    $db_username = getenv('DB_USER');
+    $db_password = getenv('DB_PASS');
+    $db_name = getenv('DB_NAME');
   } else {
     //Get Heroku ClearDB connection information
     $cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-    $cleardb_server = $cleardb_url["host"];
-    $cleardb_username = $cleardb_url["user"];
-    $cleardb_password = $cleardb_url["pass"];
-    $cleardb_db = substr($cleardb_url["path"],1);
+    $db_hostname = $cleardb_url["host"];
+    $db_username = $cleardb_url["user"];
+    $db_password = $cleardb_url["pass"];
+    $db_name = substr($cleardb_url["path"],1);
 
 
     $active_group = 'default';
@@ -20,10 +20,10 @@
 
     $db['default'] = array(
         'dsn' => '',
-        'hostname' => $cleardb_server,
-        'username' => $cleardb_username,
-        'password' => $cleardb_password,
-        'database' => $cleardb_db,
+        'hostname' => $db_hostname,
+        'username' => $db_username,
+        'password' => $db_password,
+        'database' => $db_name,
         'dbdriver' => 'mysqli',
         'dbprefix' => '',
         'pconnect' => FALSE,
@@ -42,7 +42,7 @@
   }
 
   /* Attempt to connect to MySQL database */
-  $link = mysqli_connect($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
+  $link = mysqli_connect($db_hostname, $db_username, $db_password, $db_name);
   // Check connection
   if($link === false){
     die("ERROR: Could not connect. " . mysqli_connect_error());
