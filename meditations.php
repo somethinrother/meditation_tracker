@@ -75,7 +75,22 @@
           <input type="reset" class="btn btn-default" value="Reset">
         </div>
       </form>
-      <!-- Link to your calendar -->
+      <h1>Your past sessions</h1>
+      <?php
+        $sql = "SELECT * FROM meditations WHERE user_id=" . $user_id;
+        $result = mysqli_query($link, $sql);
+        
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while($row = mysqli_fetch_assoc($result)) {
+                echo "id: " . $row["id"]. " - Duration: " . $row["duration"]. " - Description: " . $row["description"]. "<br>";
+            }
+        } else {
+            echo "0 results";
+        }
+        
+        mysqli_close($conn);
+      ?>
     </div>    
   </body>
 </html>
