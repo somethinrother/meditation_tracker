@@ -6,7 +6,7 @@
     exit;
   }
   
-  require_once "config.php";
+  require_once "db/config.php";
   
   $new_password = $confirm_password = "";
   $new_password_err = $confirm_password_err = "";

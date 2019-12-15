@@ -6,7 +6,7 @@
     exit;
   }
 
-  require_once "config.php";
+  require_once "db/config.php";
   
   $username = $password = "";
   $username_err = $password_err = "";
