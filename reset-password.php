@@ -2,7 +2,7 @@
   session_start();
   
   if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+    header("location: index.php");
     exit;
   }
   
@@ -41,7 +41,7 @@
           
           if(mysqli_stmt_execute($stmt)){
             session_destroy();
-            header("location: login.php");
+            header("location: index.php");
             exit();
           } else{
             echo "Oops! Something went wrong. Please try again later.";
