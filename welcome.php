@@ -22,7 +22,6 @@
   <body>
     <div class="page-header">
       <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to our site.</h1>
-      <h1><?php echo getenv('ENVIRONMENT') ?></h1>
     </div>
     <p>
       <a href="reset-password.php" class="btn btn-warning">Reset Your Password</a>
