@@ -25,7 +25,7 @@
     $active_group = 'default';
     $query_builder = TRUE;
 
-    $link['default'] = array(
+    $db['default'] = array(
         'dsn'    => '',
         'hostname' => $cleardb_server,
         'username' => $cleardb_username,
@@ -46,5 +46,6 @@
         'failover' => array(),
         'save_queries' => TRUE
     );
+    $link = mysqli_connect($cleardb_server, $cleardb_username, $cleardb_password, $cleardb_db);
   }
 ?>
