@@ -101,6 +101,11 @@
         </div>
         <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
       </form>
+
+      <h1><?php echo $cleardb_url ?></h1>
+      <h1><?php echo $cleardb_server ?></h1>
+      <h1><?php echo $cleardb_username ?></h1>
+      <h1><?php echo $cleardb_password ?></h1>
     </div>
   </body>
 </html>
