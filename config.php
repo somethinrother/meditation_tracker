@@ -25,7 +25,7 @@
     $active_group = 'default';
     $query_builder = TRUE;
 
-    $db['default'] = array(
+    $link['default'] = array(
         'dsn'    => '',
         'hostname' => $cleardb_server,
         'username' => $cleardb_username,
