@@ -1,7 +1,7 @@
 <?php
   require_once "functions.php";
 
-  redirectLoggedOutUser('index.php');
+  redirectLoggedOutUser('login.php');
   
   require_once "db/config.php";
   
@@ -38,7 +38,7 @@
           
           if(mysqli_stmt_execute($stmt)){
             session_destroy();
-            header("location: index.php");
+            header("location: login.php");
             exit();
           } else{
             echo "Oops! Something went wrong. Please try again later.";

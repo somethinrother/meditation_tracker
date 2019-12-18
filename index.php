@@ -1,72 +1,47 @@
 <?php
-  session_start();
-  
-  if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: meditations.php");
-    exit;
-  }
+  require_once "functions.php";
+
+  redirectLoggedOutUser('login.php');
 
   require_once "db/config.php";
   
-  $username = $password = "";
-  $username_err = $password_err = "";
+  $user_id = $_SESSION["id"];
+  $duration = $description = "";
+  $duration_err = $description_err = "";
   
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-  
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-      $username_err = "Please enter username.";
-    } else{
-      $username = trim($_POST["username"]);
+    // Validate duration
+    if($_POST["duration"] <= 0){
+      $duration_err = "You can't save a meditation session of less than a minute.";
+    } else {
+      $duration = trim($_POST["duration"]);
     }
-    
-    // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-      $password_err = "Please enter your password.";
+
+    // Validate description
+    if(empty(trim($_POST["description"]))){
+      $description_err = "Please enter a description.";
     } else{
-      $password = trim($_POST["password"]);
+      $description = trim($_POST["description"]);
     }
-    
-    // Validate credentials
-    if(empty($username_err) && empty($password_err)){
-      $sql = "SELECT id, username, password FROM users WHERE username = ?";
-      
+    // Check input errors before inserting in database
+    if(empty($duration_err) && empty($description_err)){
+      $sql = "INSERT INTO meditations (user_id, duration, description) VALUES (?, ?, ?)";
+        
       if($stmt = mysqli_prepare($link, $sql)){
-        mysqli_stmt_bind_param($stmt, "s", $param_username);
-        $param_username = $username;
+        mysqli_stmt_bind_param($stmt, "iis", $param_user_id, $param_duration, $param_description);
+        $param_user_id = $user_id;
+        $param_duration = $duration;
+        $param_description = $description;
         
         if(mysqli_stmt_execute($stmt)){
-          mysqli_stmt_store_result($stmt);
-          
-          if(mysqli_stmt_num_rows($stmt) == 1){                    
-            mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
-
-            if(mysqli_stmt_fetch($stmt)){
-
-              if(password_verify($password, $hashed_password)){
-                session_start();
-                
-                $_SESSION["loggedin"] = true;
-                $_SESSION["id"] = $id;
-                $_SESSION["username"] = $username;                            
-                
-                header("location: meditations.php");
-              } else{
-                $password_err = "The password you entered was not valid.";
-              }
-            }
-          } else{
-            $username_err = "No account found with that username.";
-          }
+          header("location: index.php");
         } else{
-          echo "Oops! Something went wrong. Please try again later.";
+          echo "Something went wrong. Please try again later.";
         }
       }
-      
+        
       mysqli_stmt_close($stmt);
     }
-    
-    mysqli_close($link);
   }
 ?>
  
@@ -74,7 +49,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Record a Meditation</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
     <style type="text/css">
       body{ font: 14px sans-serif; }
@@ -83,24 +58,39 @@
   </head>
   <body>
     <div class="wrapper">
-      <h2>Login</h2>
-      <p>Please fill in your credentials to login.</p>
+      <h2>Record a New Meditation?</h2>
       <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
-          <label>Username</label>
-          <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
-          <span class="help-block"><?php echo $username_err; ?></span>
-        </div>
-        <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
-          <label>Password</label>
-          <input type="password" name="password" class="form-control">
-          <span class="help-block"><?php echo $password_err; ?></span>
+          <label>Duration (in minutes)</label>
+          <input type="number" name="duration" class="form-control" value="<?php echo $duration; ?>">
+          <span class="help-block"><?php echo $duration_err; ?></span>
+        </div>    
+        <div class="form-group <?php echo (!empty($description_err)) ? 'has-error' : ''; ?>">
+          <label>Description</label>
+          <input type="description" name="description" class="form-control" value="<?php echo $description; ?>">
+          <span class="help-block"><?php echo $description_err; ?></span>
         </div>
         <div class="form-group">
-          <input type="submit" class="btn btn-primary" value="Login">
+          <input type="submit" class="btn btn-primary" value="Submit">
+          <input type="reset" class="btn btn-default" value="Reset">
         </div>
-        <p>Don't have an account? <a href="register.php">Sign up now</a>.</p>
       </form>
-    </div>
+      <h1>Your past sessions</h1>
+      <?php
+        $sql = "SELECT * FROM meditations WHERE user_id=" . $user_id;
+        $result = mysqli_query($link, $sql);
+        
+        if (mysqli_num_rows($result) > 0) {
+            // output data of each row
+            while($row = mysqli_fetch_assoc($result)) {
+                echo "id: " . $row["id"]. " - Duration: " . $row["duration"]. " - Description: " . $row["description"]. "<br>";
+            }
+        } else {
+            echo "0 results";
+        }
+        
+        mysqli_close($conn);
+      ?>
+    </div>    
   </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
   require_once "functions.php";
 
-  redirectLoggedOutUser('index.php');
+  redirectLoggedOutUser('login.php');
 ?>
  
 <!DOCTYPE html>
