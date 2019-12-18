@@ -1,7 +1,7 @@
 <?php
   require_once "functions.php";
 
-  redirectLoggedOutUser('index.php');
+  redirectLoggedOutUser('login.php');
   
   require_once "db/config.php";
   
@@ -38,7 +38,7 @@
           
           if(mysqli_stmt_execute($stmt)){
             session_destroy();
-            header("location: index.php");
+            header("location: login.php");
             exit();
           } else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -80,7 +80,7 @@
         </div>
         <div class="form-group">
           <input type="submit" class="btn btn-primary" value="Submit">
-          <a class="btn btn-link" href="welcome.php">Cancel</a>
+          <a class="btn btn-link" href="account.php">Cancel</a>
         </div>
       </form>
     </div>    
